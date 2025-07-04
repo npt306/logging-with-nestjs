@@ -8,18 +8,20 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AllExceptionsFilter } from './filters/all-exceptions.filter';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+import { RequestContexModule } from './common/context/request-context.module';
 @Module({
   imports: [
     UsersModule,
     LoggerModule,
+    RequestContexModule,
     ConfigModule.forRoot({
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
       isGlobal: true,
     }),
-
   ],
   controllers: [AppController],
   providers: [
+    RequestIdMiddleware,
     AppService,
     {
       provide: APP_INTERCEPTOR,
